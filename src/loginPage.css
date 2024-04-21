@@ -1,0 +1,57 @@
+.main{
+    width: 100vw;
+    background-color: #a6c5f4;
+    height: 100vh;
+    /* padding: 2%; */
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.submain{
+    background-color: white;
+    height: 83vh;
+    width: 83vw;
+    display: flex;
+}
+.container{
+    padding: 0;
+
+}
+.firstGrid{
+    width: 65vw;
+    height: 83vh;
+    background-color: rgb(255, 255, 255);
+    border-style:inset;
+    
+}
+.secondGrid{
+    width: 35vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-style:inset;
+}
+
+.form-wrapper {
+    width: 80%;
+    text-align: center;
+  }
+  
+  .signinButton{
+    margin-top: 3%;
+    text-align: center;
+    align-items: center;
+    font-weight: bold;
+  }
+  .Logo{
+    height:5vh;
+    margin-bottom:5%;
+ 
+  }
+  .Login-img{
+    width: 30vw;
+    height: 83vh;
+    
+
+  }
