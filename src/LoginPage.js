@@ -80,6 +80,7 @@ const LoginPage = () => {
                 className="mb-3"
               >
                 <Form.Control
+                  id="input-box"
                   type="email"
                   placeholder="name@example.com"
                   value={email}
@@ -126,7 +127,12 @@ const LoginPage = () => {
                 </a>
               </div>
               <div className="d-flex justify-content-center">
-                <Button variant="primary" className="btn-md custom-bold" style={{fontWeight:"600"}} type="submit">
+                <Button
+                  variant="primary"
+                  className="btn-md custom-bold"
+                  style={{ fontWeight: "600" }}
+                  type="submit"
+                >
                   {isSignUp ? "Sign Up" : "Sign In"}
                 </Button>
               </div>
@@ -139,7 +145,7 @@ const LoginPage = () => {
                   : "Don't have an account? "}
                 <span
                   style={{
-                    color: "#2e4167",
+                    color: "#0d6efd",
                     textDecoration: "underline",
                     cursor: "pointer",
                   }}
