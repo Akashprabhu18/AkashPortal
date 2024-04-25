@@ -1,50 +1,81 @@
 import React, { useState } from "react";
 import "./loginPage.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import {
-  Container,
-  Row,
-  Col,
-  Button,
-  Card,
-  Form,
-  FloatingLabel,
-} from "react-bootstrap";
+import { Button, Form, FloatingLabel } from "react-bootstrap";
 
 const LoginPage = () => {
-  const [isSignUp, setIsSignUp] = useState(false);
-  const [showPassword, setShowPassword] = useState(false); // Add state for showing password
-  const [name, SetName] = useState("");
-  const [email, setEmail] = useState(""); // State for email
-  const [password, setPassword] = useState(""); // State for password
-  const [confirmPassword, setConfirmPassword] = useState(""); // State for confirm password
+  const [isResetPass, setIsResetPass] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [newPasswordError, setNewPasswordError] = useState("");
+  const [confirmPasswordError, setConfirmPasswordError] = useState("");
 
-  const handleSignUpClick = () => {
-    setIsSignUp(true);
+  const handleResetPassClick = () => {
+    setIsResetPass(true);
   };
 
   const handleSignInClick = () => {
-    setIsSignUp(false);
+    setIsResetPass(false);
   };
 
   const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword); // Toggle password visibility
+    setShowPassword(!showPassword);
+  };
+
+  const validateEmail = (value) => {
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+      setEmailError("Please enter a valid email address.");
+    } else {
+      setEmailError("");
+    }
+  };
+
+  const validatePassword = (value) => {
+    if (!/(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.{6,})/.test(value)) {
+      setPasswordError(
+        "Password must be at least 6 characters long, contain at least one uppercase letter, and one special character."
+      );
+    } else {
+      setPasswordError("");
+    }
+  };
+
+  const validateNewPassword = (value) => {
+    if (!/(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.{6,})/.test(value)) {
+      setNewPasswordError(
+        "New password must be at least 6 characters long, contain at least one uppercase letter, and one special character."
+      );
+    } else {
+      setNewPasswordError("");
+    }
+  };
+
+  const validateConfirmPassword = (value) => {
+    if (isResetPass && newPassword !== value) {
+      setConfirmPasswordError("Passwords do not match");
+    } else {
+      setConfirmPasswordError("");
+    }
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault(); // Prevent default form submission behavior
+    e.preventDefault();
 
-    // Check if any required field is empty
-    if (isSignUp && (!name || !email || !password || !confirmPassword)) {
-      alert("Please fill in all required fields.");
-      return;
-    } else if (!isSignUp && (!email || !password)) {
-      alert("Please fill in all required fields.");
-      return;
-    }
+    // Clear all errors
+    setEmailError("");
+    setPasswordError("");
+    setNewPasswordError("");
+    setConfirmPasswordError("");
 
-    // If all required fields are filled, proceed with form submission
-    // Add your form submission logic here
+    validateEmail(email); // Email validation
+    validatePassword(password); // Password validation
+    validateNewPassword(newPassword); // New password validation
+    validateConfirmPassword(confirmPassword); // Confirm password validation
   };
 
   return (
@@ -57,68 +88,95 @@ const LoginPage = () => {
           <div className="form-wrapper">
             <img src="./Images/Savic.png" alt="Logo" className="Logo" />
             <Form onSubmit={handleSubmit}>
-              {" "}
-              {/* Add onSubmit event handler */}
-              {isSignUp && (
+              {!isResetPass && (
                 <FloatingLabel
-                  controlId="floatingName"
-                  label="Name"
+                  controlId="floatingInput"
+                  label="Email address"
                   className="mb-3"
                 >
                   <Form.Control
-                    type="text"
-                    placeholder="Your Name"
-                    value={name}
-                    onChange={(e) => SetName(e.target.value)}
+                    id="input-box"
+                    type="email"
+                    placeholder="name@example.com"
+                    value={email}
+                    onChange={(e) => {
+                      setEmail(e.target.value);
+                      validateEmail(e.target.value);
+                    }}
                     required
                   />
+                  {emailError && (
+                    <Form.Text className="text-danger">{emailError}</Form.Text>
+                  )}
                 </FloatingLabel>
               )}
               <FloatingLabel
-                controlId="floatingInput"
-                label="Email address"
-                className="mb-3"
-              >
-                <Form.Control
-                  id="input-box"
-                  type="email"
-                  placeholder="name@example.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
-              </FloatingLabel>
-              <FloatingLabel
                 controlId="floatingPassword"
-                label="Password"
+                label={isResetPass ? "Cuurent Password" : "Password"}
                 className="mb-3"
               >
                 <Form.Control
                   type={showPassword ? "text" : "password"}
-                  placeholder="Password"
+                  placeholder="password"
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                    validatePassword(e.target.value);
+                  }}
                   required
                 />
+                {passwordError && (
+                  <Form.Text className="text-danger">{passwordError}</Form.Text>
+                )}
               </FloatingLabel>
-              {isSignUp && (
-                <FloatingLabel
-                  controlId="floatingConfirmPassword"
-                  label="Confirm Password"
-                  className="mb-3"
-                >
-                  <Form.Control
-                    type={showPassword ? "text" : "password"}
-                    placeholder="Confirm Password"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    required
-                  />
-                </FloatingLabel>
+              {isResetPass && (
+                <>
+                  <FloatingLabel
+                    controlId="floatingNewPassword"
+                    label="New Password"
+                    className="mb-3"
+                  >
+                    <Form.Control
+                      type={showPassword ? "text" : "password"}
+                      placeholder="New Password"
+                      value={newPassword}
+                      onChange={(e) => {
+                        setNewPassword(e.target.value);
+                        validateNewPassword(e.target.value);
+                      }}
+                      required
+                    />
+                    {newPasswordError && (
+                      <Form.Text className="text-danger">
+                        {newPasswordError}
+                      </Form.Text>
+                    )}
+                  </FloatingLabel>
+
+                  <FloatingLabel
+                    controlId="floatingConfirmPassword"
+                    label="Confirm Password"
+                    className="mb-3"
+                  >
+                    <Form.Control
+                      type={showPassword ? "text" : "password"}
+                      placeholder="Confirm Password"
+                      value={confirmPassword}
+                      onChange={(e) => {
+                        setConfirmPassword(e.target.value);
+                        validateConfirmPassword(e.target.value);
+                      }}
+                      required
+                    />
+                    {confirmPasswordError && (
+                      <Form.Text className="text-danger">
+                        {confirmPasswordError}
+                      </Form.Text>
+                    )}
+                  </FloatingLabel>
+                </>
               )}
               <div className="d-flex justify-content-end mb-3 text-end">
-                {" "}
-                {/* Add text-end class */}
                 <a
                   style={{ textDecoration: "underline", cursor: "pointer" }}
                   onClick={togglePasswordVisibility}
@@ -133,29 +191,28 @@ const LoginPage = () => {
                   style={{ fontWeight: "600" }}
                   type="submit"
                 >
-                  {isSignUp ? "Sign Up" : "Sign In"}
+                  {isResetPass ? "Save" : "Log in"}
                 </Button>
               </div>
             </Form>
             <br />
             <div className="bold-span-wrapper">
               <span style={{ fontWeight: "bold" }}>
-                {isSignUp
-                  ? "Already have an account? "
-                  : "Don't have an account? "}
+                {isResetPass ? "Click here to: " : "Reset Password ? "}
                 <span
                   style={{
                     color: "#0d6efd",
                     textDecoration: "underline",
                     cursor: "pointer",
                   }}
-                  onClick={isSignUp ? handleSignInClick : handleSignUpClick}
+                  onClick={
+                    isResetPass ? handleSignInClick : handleResetPassClick
+                  }
                 >
-                  {isSignUp ? "Sign in" : "Sign up"}
+                  {isResetPass ? "Sign in" : "Click here"}
                 </span>
               </span>{" "}
             </div>
-            {/* Copyright notice */}
             <div className="copyright">
               <p>&copy; SAVIC {new Date().getFullYear()} </p>
             </div>
