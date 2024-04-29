@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import "./loginPage.css";
+import "./LoginPage.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Button, Form, FloatingLabel } from "react-bootstrap";
+
 
 const LoginPage = () => {
   const [isResetPass, setIsResetPass] = useState(false);
@@ -112,7 +113,7 @@ const LoginPage = () => {
               )}
               <FloatingLabel
                 controlId="floatingPassword"
-                label={isResetPass ? "Cuurent Password" : "Password"}
+                label={isResetPass ? "Current Password" : "Password"}
                 className="mb-3"
               >
                 <Form.Control
